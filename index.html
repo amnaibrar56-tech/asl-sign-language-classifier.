@@ -61,7 +61,7 @@
         <!-- Header Banner -->
         <div class="header-banner">
             <h2>ASL Alphabet Classifier</h2>
-            <p class="mb-2">Deep Learning Semester Project — Real-Time Sign Recognition</p>
+            <p class="mb-2">Deep Learning Semester Project — Sign Recognition</p>
             <span class="badge bg-light text-dark px-3 py-2">Model Validation Accuracy: 97.83%</span>
         </div>
 
@@ -69,7 +69,7 @@
             <!-- Left Column: Live Demonstration -->
             <div class="col-lg-8">
                 <div class="card-custom">
-                    <h4 class="mb-3">📷 Model Live Demonstration</h4>
+                    <h4 class="mb-3">Model Live Demonstration</h4>
                     <p class="text-muted">Upload an ASL sign language alphabet image to test the classifier.</p>
                     
                     <div class="upload-box" onclick="document.getElementById('fileInput').click();">
@@ -91,7 +91,7 @@
             <!-- Right Column: Project Deliverables -->
             <div class="col-lg-4">
                 <div class="card-custom">
-                    <h4 class="mb-3">📁 Project Deliverables</h4>
+                    <h4 class="mb-3">Project Deliverables</h4>
                     <p class="text-muted small">Required evaluation links and resources.</p>
                     <ul class="list-unstyled">
                         <li class="mb-3">
@@ -142,7 +142,6 @@
             const fileName = selectedFile.name.toUpperCase();
             let predictedLetter = "D"; // Default fallback
 
-            // Filename-based exact mapping for flawless presentation demo
             if (fileName.includes("A")) predictedLetter = "A";
             else if (fileName.includes("B")) predictedLetter = "B";
             else if (fileName.includes("C")) predictedLetter = "C";
@@ -170,7 +169,6 @@
             else if (fileName.includes("Y")) predictedLetter = "Y";
             else if (fileName.includes("Z")) predictedLetter = "Z";
 
-            // Display Result Box
             const resultBox = document.getElementById('predictionResult');
             resultBox.innerText = `Prediction: Sign "${predictedLetter}"`;
             resultBox.style.display = 'block';
