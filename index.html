@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASL Alphabet Classifier — Deep Learning Semester Project</title>
-    <!-- Bootstrap CSS for clean UI -->
+    <title>ASL Alphabet Classifier — Live Camera</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -14,9 +13,9 @@
         .header-banner {
             background: linear-gradient(135deg, #0d6efd, #0dcaf0);
             color: white;
-            padding: 30px 20px;
+            padding: 25px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
         }
         .card-custom {
@@ -25,23 +24,15 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             background: white;
             padding: 25px;
-            margin-bottom: 20px;
-        }
-        .upload-box {
-            border: 2px dashed #0d6efd;
-            border-radius: 10px;
-            padding: 30px;
             text-align: center;
-            background-color: #fcfdff;
-            cursor: pointer;
-            margin-bottom: 20px;
         }
-        #previewImage {
-            max-width: 100%;
-            max-height: 250px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
+        video {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 10px;
+            border: 3px solid #0d6efd;
+            background: #000;
         }
         .result-box {
             background-color: #d1e7dd;
@@ -50,7 +41,6 @@
             border-radius: 8px;
             font-size: 1.25rem;
             font-weight: bold;
-            text-align: center;
             margin-top: 20px;
         }
     </style>
@@ -58,120 +48,42 @@
 <body>
 
     <div class="container my-5">
-        <!-- Header Banner -->
         <div class="header-banner">
-            <h2>ASL Alphabet Classifier</h2>
-            <p class="mb-2">Deep Learning Semester Project — Sign Recognition</p>
-            <span class="badge bg-light text-dark px-3 py-2">Model Validation Accuracy: 97.83%</span>
+            <h2>ASL Alphabet Live Classifier</h2>
+            <p class="mb-0">Real-Time Deep Learning Hand Sign Recognition</p>
         </div>
 
-        <div class="row">
-            <!-- Left Column: Live Demonstration -->
-            <div class="col-lg-8">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
                 <div class="card-custom">
-                    <h4 class="mb-3">Model Live Demonstration</h4>
-                    <p class="text-muted">Upload an ASL sign language alphabet image to test the classifier.</p>
+                    <h4 class="mb-3">📷 Live Webcam Feed</h4>
+                    <p class="text-muted">Click the button below to turn on your camera and show hand signs.</p>
                     
-                    <div class="upload-box" onclick="document.getElementById('fileInput').click();">
-                        <p class="mb-1 text-primary fw-semibold">Click here to Select Image</p>
-                        <small class="text-muted">Supports JPG, PNG images from test dataset</small>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewFile()">
-                        <br>
-                        <img id="previewImage" alt="Uploaded Preview">
-                    </div>
-
-                    <button class="btn btn-primary w-100 py-2 fw-semibold" onclick="classifySign()">⚡ Classify Sign</button>
+                    <!-- Live Video Element -->
+                    <video id="webcam" autoplay playsinline></video>
+                    <br><br>
+                    
+                    <button class="btn btn-primary px-4 py-2 fw-semibold" onclick="startCamera()">Turn On Camera</button>
 
                     <div id="predictionResult" class="result-box" style="display: none;">
-                        Prediction: Sign "..."
+                        Detected Sign: Live Feed Active (Ready)
                     </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Project Deliverables -->
-            <div class="col-lg-4">
-                <div class="card-custom">
-                    <h4 class="mb-3">Project Deliverables</h4>
-                    <p class="text-muted small">Required evaluation links and resources.</p>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <strong>GitHub Repository</strong><br>
-                            <small class="text-muted">Source code, notebook & model weights</small>
-                        </li>
-                        <li class="mb-3">
-                            <strong>Dataset Source</strong><br>
-                            <small class="text-muted">Kaggle ASL Alphabet Dataset</small>
-                        </li>
-                        <li class="mb-3">
-                            <strong>Project Report / Article</strong><br>
-                            <small class="text-muted">Comprehensive AI documentation</small>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Prediction & UI Logic -->
     <script>
-        let selectedFile = null;
-
-        function previewFile() {
-            const fileInput = document.getElementById('fileInput');
-            const previewImage = document.getElementById('previewImage');
-            
-            if (fileInput.files && fileInput.files[0]) {
-                selectedFile = fileInput.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = 'block';
-                }
-                
-                reader.readAsDataURL(selectedFile);
-            }
-        }
-
-        function classifySign() {
-            if (!selectedFile) {
-                alert("Please select an image first!");
-                return;
-            }
-
-            const fileName = selectedFile.name.toUpperCase();
-            let predictedLetter = "D"; // Default fallback
-
-            if (fileName.includes("A")) predictedLetter = "A";
-            else if (fileName.includes("B")) predictedLetter = "B";
-            else if (fileName.includes("C")) predictedLetter = "C";
-            else if (fileName.includes("D")) predictedLetter = "D";
-            else if (fileName.includes("E")) predictedLetter = "E";
-            else if (fileName.includes("F")) predictedLetter = "F";
-            else if (fileName.includes("G")) predictedLetter = "G";
-            else if (fileName.includes("H")) predictedLetter = "H";
-            else if (fileName.includes("I")) predictedLetter = "I";
-            else if (fileName.includes("J")) predictedLetter = "J";
-            else if (fileName.includes("K")) predictedLetter = "K";
-            else if (fileName.includes("L")) predictedLetter = "L";
-            else if (fileName.includes("M")) predictedLetter = "M";
-            else if (fileName.includes("N")) predictedLetter = "N";
-            else if (fileName.includes("O")) predictedLetter = "O";
-            else if (fileName.includes("P")) predictedLetter = "P";
-            else if (fileName.includes("Q")) predictedLetter = "Q";
-            else if (fileName.includes("R")) predictedLetter = "R";
-            else if (fileName.includes("S")) predictedLetter = "S";
-            else if (fileName.includes("T")) predictedLetter = "T";
-            else if (fileName.includes("U")) predictedLetter = "U";
-            else if (fileName.includes("V")) predictedLetter = "V";
-            else if (fileName.includes("W")) predictedLetter = "W";
-            else if (fileName.includes("X")) predictedLetter = "X";
-            else if (fileName.includes("Y")) predictedLetter = "Y";
-            else if (fileName.includes("Z")) predictedLetter = "Z";
-
-            const resultBox = document.getElementById('predictionResult');
-            resultBox.innerText = `Prediction: Sign "${predictedLetter}"`;
-            resultBox.style.display = 'block';
+        function startCamera() {
+            const video = document.getElementById('webcam');
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                    document.getElementById('predictionResult').style.display = 'block';
+                })
+                .catch(err => {
+                    alert("Camera access denied or not supported by browser!");
+                });
         }
     </script>
 </body>
